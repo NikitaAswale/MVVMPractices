@@ -6,12 +6,11 @@ import com.example.myapplication.data.model.Post
 class PostRepository {
     private val apiService = RetrofitInstance.api
     
-    suspend fun getPosts(): Result<List<Post>> {
+    suspend fun getPosts(): List<Post> {
         return try {
-            val posts = apiService.getPosts()
-            Result.success(posts)
+            apiService.getPosts()
         } catch (e: Exception) {
-            Result.failure(e)
+            emptyList()
         }
     }
 }

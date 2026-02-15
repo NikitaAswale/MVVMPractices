@@ -14,29 +14,13 @@ class PostViewModel : ViewModel() {
     private val _posts = MutableStateFlow<List<Post>>(emptyList())
     val posts: StateFlow<List<Post>> = _posts
     
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading
-    
-    private val _errorMessage = MutableStateFlow<String?>(null)
-    val errorMessage: StateFlow<String?> = _errorMessage
-    
     init {
         fetchPosts()
     }
     
     fun fetchPosts() {
         viewModelScope.launch {
-            _isLoading.value = true
-            _errorMessage.value = null
-            
-            repository.getPosts()
-                .onSuccess { postsList ->
-                    _posts.value = postsList
-                }
-                .onFailure { error ->
-                    _errorMessage.value = error.message ?: "Unknown error occurred"
-                }
-            _isLoading.value = false
+            _posts.value = repository.getPosts()
         }
     }
 }
